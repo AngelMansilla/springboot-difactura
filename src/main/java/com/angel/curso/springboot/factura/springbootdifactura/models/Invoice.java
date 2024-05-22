@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
+
 @Component
 public class Invoice {
 
@@ -19,6 +21,20 @@ public class Invoice {
     @Autowired
     @Qualifier("default")
     private List<Item> items;
+
+    public Invoice() {
+        System.out.println("Creando el componente de la factura");
+        System.out.println(client);
+        System.out.println(description);
+
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("Creando el componente de la factura");
+        System.out.println(client.getName().concat(" Pepe"));
+        System.out.println(description.concat(" del cliente: ").concat(client.getName().concat(" ")).concat(client.getLastname()));
+    }
 
     public Client getClient() {
         return client;
@@ -47,11 +63,11 @@ public class Invoice {
     public int getTotal() {
         // int total = 0;
         // for (Item item : items) {
-        //     total += item.getImporte();
+        // total += item.getImporte();
         // }
         int total = items.stream()
-        .map(item -> item.getImporte())
-        .reduce(0,(sum, importe) -> sum + importe);
+                .map(item -> item.getImporte())
+                .reduce(0, (sum, importe) -> sum + importe);
         return total;
     }
 
