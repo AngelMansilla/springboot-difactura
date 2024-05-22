@@ -11,7 +11,7 @@ public class Invoice {
 
     @Autowired
     private Client client;
-        
+
     @Value("${invoice.description}")
     private String description;
 
@@ -40,6 +40,17 @@ public class Invoice {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public int getTotal() {
+        // int total = 0;
+        // for (Item item : items) {
+        //     total += item.getImporte();
+        // }
+        int total = items.stream()
+        .map(item -> item.getImporte())
+        .reduce(0,(sum, importe) -> sum + importe);
+        return total;
     }
 
 }
