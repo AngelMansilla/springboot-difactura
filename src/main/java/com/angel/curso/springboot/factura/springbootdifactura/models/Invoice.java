@@ -6,11 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 
 @Component
+@RequestScope
+// @JsonIgnoreProperties({ "targetSource", "advisors" })
 public class Invoice {
 
     @Autowired
@@ -33,9 +38,9 @@ public class Invoice {
     @PostConstruct
     public void init() {
         System.out.println("Creando el componente de la factura");
-        System.out.println(client.getName().concat(" Pepe"));
-        System.out.println(
-                description.concat(" del cliente: ").concat(client.getName().concat(" ")).concat(client.getLastname()));
+        client.setName(client.getName().concat(" Pepe"));
+        description = description.concat(" del cliente: ").concat(client.getName().concat(" "))
+                .concat(client.getLastname());
     }
 
     @PreDestroy
